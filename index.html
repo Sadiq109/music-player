@@ -2,77 +2,41 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Music Player</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f7f7f7;
-      margin: 0;
-      padding: 20px;
-      color: #333;
-    }
-    h1 {
-      text-align: center;
-      margin-top: 0;
-    }
-    #player {
-      max-width: 400px;
-      margin: 0 auto;
-      padding: 20px;
-      background: #fff;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      text-align: center;
-    }
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-    #playlist li {
-      padding: 8px 0;
-      cursor: pointer;
-      border-bottom: 1px solid #e0e0e0;
-    }
-    #playlist li:last-child {
-      border-bottom: none;
-    }
-    #playlist li:hover {
-      background: #f0f0f0;
-    }
-    #playlist li.active {
-      color: #1976d2;
-      font-weight: bold;
-    }
-  </style>
+  <title>Music Player</title>
+  <link rel="stylesheet" href="src/style.css">
 </head>
 <body>
-  <h1>My Music Player</h1>
-  <div id="player">
-    <audio id="audio" controls style="width: 100%;">
-      <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-      Your browser does not support the audio element.
-    </audio>
-    <ul id="playlist">
-      <li data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" class="active">SoundHelix Song 1</li>
-      <li data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3">SoundHelix Song 2</li>
-      <li data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3">SoundHelix Song 3</li>
-    </ul>
-  </div>
-  <script>
-    const audio = document.getElementById('audio');
-    const playlist = document.getElementById('playlist');
-    // Play selected song and update active class
-    playlist.addEventListener('click', function(event) {
-      if (event.target && event.target.tagName === 'LI') {
-        const items = playlist.querySelectorAll('li');
-        items.forEach(item => item.classList.remove('active'));
-        event.target.classList.add('active');
-        const src = event.target.getAttribute('data-src');
-        audio.src = src;
-        audio.play();
-      }
-    });
-  </script>
+  <main class="player" aria-label="Music player">
+    <div class="art" aria-hidden="true">
+      <div class="bars"><span></span><span></span><span></span><span></span><span></span></div>
+    </div>
+    <h1 id="title">-</h1>
+    <p id="artist" class="artist">-</p>
+
+    <div class="progress">
+      <span id="current">0:00</span>
+      <input id="seek" type="range" min="0" max="0" value="0" aria-label="Seek">
+      <span id="duration">0:00</span>
+    </div>
+
+    <div class="controls">
+      <button id="shuffle" class="small" type="button" aria-pressed="false" aria-label="Shuffle" title="Shuffle">&#x1F500;</button>
+      <button id="prev" type="button" aria-label="Previous track" title="Previous (p)">&#x23EE;</button>
+      <button id="play" class="main" type="button" aria-label="Play or pause" title="Play/Pause (space)">
+        <span class="icon-play">&#x25B6;</span><span class="icon-pause">&#x23F8;</span>
+      </button>
+      <button id="next" type="button" aria-label="Next track" title="Next (n)">&#x23ED;</button>
+      <button id="repeat" class="small" type="button" data-mode="all" aria-label="Repeat: all" title="Repeat: all">&#x1F501;</button>
+    </div>
+
+    <label class="volume">Volume <input id="volume" type="range" min="0" max="1" step="0.05"></label>
+    <p id="status" class="status" role="status"></p>
+
+    <ol id="playlist" class="playlist" aria-label="Playlist"></ol>
+    <p class="keys">Space play/pause &middot; &larr; &rarr; seek 5s &middot; n / p next/previous</p>
+  </main>
+  <audio id="audio" preload="metadata"></audio>
+  <script type="module" src="src/app.js"></script>
 </body>
 </html>
